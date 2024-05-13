@@ -1,0 +1,42 @@
+base:
+  project_name: mlflow-testing
+  target: quality
+
+load_dataset:
+  drive_link: C:\Meera\Jio\\15MLOps\mlflow\mlflow-pipeline\src\data\WineQT.csv
+  # https://drive.google.com/file/d/1FCVWcNyBX6tFYjfORhnAvIwS8I8zV92j/view?usp=sharing
+  raw_data: /data/raw
+  file_name: wineq
+
+make_dataset:
+  test_split: 0.20
+  seed: 41
+  processed_data: /data/processed
+  res_seed: 42
+
+build_features:
+  extended_data: /data/extended
+
+mlflow_config:
+  # artifacts_dir: artifacts
+  trainingExpName: modeltraining
+  tunningExpName: modeltunning
+  bestModelExpName: bestModel 
+  remote_server_uri: http://localhost:5000     # 127.0.0.1
+  mlflow_tracking_uri: sqlite:///mlflow.db
+  cmd: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host localhost -p 5000
+  reg_model_name: 'RFCtuned'
+  stage: production
+
+train_model:
+  n_estimators: 100
+  criterion: gini
+  max_depth: 30
+  min_samples_leaf: 30 
+  random_state: 42
+  min_samples_split: 70
+  model_dir: /models
+
+hyperopt:
+  max_eval: 1
+  model_name: best_model
